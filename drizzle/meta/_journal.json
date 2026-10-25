@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1792869256024,
+      "tag": "0000_brand_library",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1792872988006,
+      "tag": "0001_user_search_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792909892354,
+      "tag": "0002_custom_specs",
+      "breakpoints": true
+    }
+  ]
+}

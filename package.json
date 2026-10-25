@@ -1,0 +1,13 @@
+{
+  "name": "marketplace-appliance-designer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node build-images.cjs",
+    "test": "node scripts/test.cjs"
+  }
+}

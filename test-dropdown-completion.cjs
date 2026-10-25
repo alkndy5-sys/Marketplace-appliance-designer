@@ -1,0 +1,13 @@
+const fs=require('fs'),vm=require('vm');const h=fs.readFileSync('app/index.html','utf8');for(const m of h.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g))if(!m[1].includes('src=')&&!m[1].includes('module'))new vm.Script(m[2]);
+const w={};const nodes={};const node=id=>nodes[id]??={textContent:'',classList:{remove(){this.visible=true}},focus(){}};
+vm.runInNewContext(h.match(/window.SPECS_DICTIONARY = \[[\s\S]*?\n                \];/)[0],{window:w});
+vm.runInNewContext(h.slice(h.indexOf('        window.fillVerifiedBadges='),h.indexOf('        window.enrichImportedProducts=async')),{window:w,Set,document:{getElementById:node,activeElement:null}});w.showToast=()=>{};
+const dictionary=w.SPECS_DICTIONARY;
+const matched=[{titleAr:'5 شعلات',titleEn:'5 Burners',icon:'wrong'},{titleAr:'الموديل ABC123',titleEn:'Model ABC123',icon:'barcode'}];
+const result=w.fillVerifiedBadges({webDescription:'واي فاي',brandName:'LG',modelName:'ABC123'},matched);
+if(result.length!==3||result.some(s=>!dictionary.some(p=>p.ar===s.titleAr&&p.en===s.titleEn&&p.icon===s.icon)))throw Error('Non-dropdown spec');
+if(result[0].needsVerification||!result[1].needsVerification||!result[2].needsVerification)throw Error('Suggestion status');
+w.showImageBatchCompletion({done:4,images:3},4);if(!node('image-batch-completion-title').textContent.includes('انتهى')||!node('image-batch-completion-message').textContent.includes('صور بيضاء جاهزة: 3')||!node('image-batch-completion-message').textContent.includes('لم تتوفر لها صور: 1'))throw Error('Completion counts');
+w.showImageBatchCompletion({done:2,images:1,cancelled:true},4);if(!node('image-batch-completion-title').textContent.includes('توقف')||!node('image-batch-completion-message').textContent.includes('لم تُعالج بعد: 2'))throw Error('Cancellation state');
+if(h.includes('[model.specsText,model.webDescription]')||h.includes('[m.specsText,m.webDescription]')||h.includes("call('/api/product-enrich'"))throw Error('Web descriptions still used');
+console.log('PASS: dropdown-only canonical icons, suggestion flags, completion/cancellation counts, no web description matcher input, browser syntax');

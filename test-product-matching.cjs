@@ -1,0 +1,16 @@
+const fs=require('fs'),vm=require('vm');const h=fs.readFileSync('app/index.html','utf8');for(const m of h.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g))if(!m[1].includes('src=')&&!m[1].includes('module'))new vm.Script(m[2]);
+const w={};vm.runInNewContext(h.match(/window.SPECS_DICTIONARY = \[[\s\S]*?\n                \];/)[0],{window:w});vm.runInNewContext(h.slice(h.indexOf('        window.findBest3MatchingSpecs ='),h.indexOf('\n        window.handleUrlInput')),{window:w,Set,Map});
+const check=(name,specs,required,forbidden=[])=>{const result=w.findBest3MatchingSpecs(name,'oven','wifi',specs),ids=result.filter(x=>x.titleAr).map(x=>x.icon.slice(5));for(const id of required)if(!ids.includes(id))throw Error(name+': missing '+id+'; got '+ids);for(const id of forbidden)if(ids.includes(id))throw Error(name+': unwanted '+id);if(ids.length!==new Set(ids).size)throw Error('Duplicate icons');return ids;};
+check('فرن ٥ شعلات متعدد الوظائف مع مروحة تدوير الحرارة','',['5_flames','multi_function','heat_circulation_fan']);
+check('LG Refrigerator No Frost Fast Cooling GR-B562','',['no_frost','fast_cooling']);
+check('Blender Stainless Steel Blades Powerful Motor BL930','',['ss_blades','powerful_motor'],['ss_body']);
+check('فرن بدون واي فاي ومؤقت رقمي','',['smart_timer'],['wifi_control']);
+check('Oven without WiFi with digital timer','',['smart_timer'],['wifi_control']);
+check('فرن 5 شعلات','4 شعلات',['5_flames'],['4_flames','5_burners']);
+check('Smart control oven HD410','',[],['freon_410','wifi_control']);
+check('Samsung UA55CU8000','',[],['high_resolution']);
+if(check('Model ABC123','',[]).length)throw Error('Fallbacks introduced');
+check('Water dispenser ٣صنابير تحميل سفلي','',['3_taps','bottom_loading']);
+check('Oven 15 burners','',[],['5_flames','1_burner']);
+check('5 عيون فرن','',['5_burners'],['5_flames']);
+console.log('PASS: 12 product matching scenarios, Arabic/English, negation, digit boundaries, explicit overrides, no invented defaults, correct icons');
