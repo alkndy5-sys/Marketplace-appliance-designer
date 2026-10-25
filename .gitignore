@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+.env.*
+.dev.vars
+.dev.vars.*
+.wrangler/
+*.log
+excel-import-test.xlsx
